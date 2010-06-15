@@ -1,5 +1,6 @@
 ﻿NUnitGrowlAddIn
 ~~~~~~~~~~~~~~~
+Web: http://nunitgrowladdin.codeplex.com/
 
 
 INSTALLATION
