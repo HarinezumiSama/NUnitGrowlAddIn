@@ -129,7 +129,7 @@ namespace NUnitGrowlAddIn
                 "NUnit test run has failed.",
                 message,
                 Resources.Error,
-                true,
+                false,
                 Priority.High,
                 messageId);
             m_growlConnector.Notify(notification);
