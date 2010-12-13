@@ -107,10 +107,10 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if exist "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\$(TargetName).*" del /f /q "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\$(TargetName).*"
-if exist "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\Growl.*" del /f /q "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\Growl.*"
+    <PostBuildEvent>if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\$(TargetName).*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\$(TargetName).*"
+if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*"
 
-xcopy /h /r /y /f "$(TargetDir)$(TargetName).*" "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\"
-xcopy /h /r /y /f "$(TargetDir)Growl.*" "C:\Program Files\NUnit\2.5.5\bin\net-2.0\addins\"</PostBuildEvent>
+xcopy /h /r /y /f "$(TargetDir)$(TargetName).*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"
+xcopy /h /r /y /f "$(TargetDir)Growl.*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
