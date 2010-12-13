@@ -46,7 +46,7 @@ namespace NUnitGrowlAddIn
         public NUnitGrowlAddIn()
         {
             m_growlConnector = new GrowlConnector();
-            if (!m_growlConnector.IsGrowlRunning())
+            if (!GrowlConnector.IsGrowlRunningLocally())
             {
                 return;
             }
@@ -192,7 +192,7 @@ namespace NUnitGrowlAddIn
             }
             #endregion
 
-            if (m_growlConnector == null || !m_growlConnector.IsGrowlRunning())
+            if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
             {
                 return;
             }
@@ -212,7 +212,7 @@ namespace NUnitGrowlAddIn
             }
             #endregion
 
-            if (m_growlConnector == null || !m_growlConnector.IsGrowlRunning())
+            if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
             {
                 return;
             }
@@ -232,7 +232,7 @@ namespace NUnitGrowlAddIn
             m_isFirstTestFailed = false;
             m_lastTestRunFullName = name;
 
-            if (m_growlConnector == null || !m_growlConnector.IsGrowlRunning())
+            if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
             {
                 return;
             }
@@ -271,7 +271,7 @@ namespace NUnitGrowlAddIn
 
             m_isFirstTestFailed = true;
 
-            if (m_growlConnector == null || !m_growlConnector.IsGrowlRunning())
+            if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
             {
                 return;
             }
