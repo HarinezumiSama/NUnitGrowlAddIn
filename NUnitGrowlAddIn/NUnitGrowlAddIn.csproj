@@ -42,18 +42,16 @@
   <ItemGroup>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Growl for Windows\Growl.Connector.dll</HintPath>
+      <HintPath>..\Binaries\Growl.Connector.dll</HintPath>
     </Reference>
     <Reference Include="Growl.CoreLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=13e59d82e007b064, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Growl for Windows\Growl.CoreLibrary.dll</HintPath>
+      <HintPath>..\Binaries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.core.interfaces, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.core.interfaces, Version=2.5.8.10295, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\NUnit\2.5.5\bin\net-2.0\lib\nunit.core.interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -75,7 +73,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+    </None>
     <None Include="NUnitGrowlAddIn.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -107,10 +106,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\$(TargetName).*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\$(TargetName).*"
-if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*"
-
-xcopy /h /r /y /f "$(TargetDir)$(TargetName).*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"
-xcopy /h /r /y /f "$(TargetDir)Growl.*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
