@@ -34,15 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -64,10 +55,14 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\NUnitGrowlAddIn.*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\NUnitGrowlAddIn.*"
-if exist "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*" del /f /q "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\Growl.*"
+    <PostBuildEvent>SET NUnitAddInDir=C:\Program Files\NUnit\2.5.9\bin\net-2.0\addins
 
-xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\NUnitGrowlAddIn.*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"
-xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\Growl.*" "C:\Program Files\NUnit\2.5.8\bin\net-2.0\addins\"</PostBuildEvent>
+if exist "%25NUnitAddInDir%25\NUnitGrowlAddIn.*" del /f /q "%25NUnitAddInDir%25\NUnitGrowlAddIn.*"
+if exist "%25NUnitAddInDir%25\Growl.*" del /f /q "%25NUnitAddInDir%25\Growl.*"
+
+xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\NUnitGrowlAddIn.*" "%25NUnitAddInDir%25\"
+xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\Growl.*" "%25NUnitAddInDir%25\"
+
+SET NUnitAddInDir=</PostBuildEvent>
   </PropertyGroup>
 </Project>
