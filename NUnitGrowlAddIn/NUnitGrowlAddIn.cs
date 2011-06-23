@@ -17,15 +17,17 @@ namespace NUnitGrowlAddIn
     [NUnitAddin(
         Type = ExtensionType.Client | ExtensionType.Core | ExtensionType.Gui,
         Name = "NUnit Add-in for Growl Notification",
-        Description = "NUnit Add-in that sends notifications about test runs to Growl.")]
+        Description = "NUnit Add-in that sends notifications about testing progress to Growl.")]
     public sealed class NUnitGrowlAddIn : IAddin, EventListener
     {
         #region Constants
 
-        private const string c_testRunStarted = "NUnit.TestRun.Started";
-        private const string c_testRunSucceeded = "NUnit.TestRun.Succeeded";
-        private const string c_testRunFailed = "NUnit.TestRun.Failed";
-        private const string c_testRunFirstTestFailed = "NUnit.TestRun.FirstTestFailed";
+        private const string c_testRunPrefix = "NUnit.TestRun.";
+
+        private const string c_testRunStarted = c_testRunPrefix + "Started";
+        private const string c_testRunSucceeded = c_testRunPrefix + "Succeeded";
+        private const string c_testRunFailed = c_testRunPrefix + "Failed";
+        private const string c_testRunFirstTestFailed = c_testRunPrefix + "FirstTestFailed";
 
         #endregion
 
@@ -33,6 +35,7 @@ namespace NUnitGrowlAddIn
 
         private readonly GrowlConnector m_growlConnector;
         private readonly Application m_growlApplication;
+
         private bool m_isFirstTestFailed;
         private string m_lastTestRunFullName;
 
@@ -79,6 +82,11 @@ namespace NUnitGrowlAddIn
 
         private void NotifyTestRunStarted(string name, int testCount)
         {
+            if (!Settings.Default.NotifyTestRunStarted)
+            {
+                return;
+            }
+
             string message = string.Format(
                 "{0}:\n{1} test{2}.",
                 Path.GetFileName(name),
@@ -94,49 +102,18 @@ namespace NUnitGrowlAddIn
                 message,
                 null,
                 false,
-                Priority.Normal,
-                messageId);
-            m_growlConnector.Notify(notification);
-        }
-
-        private void NotifyTestRunSuccess(TestResult result)
-        {
-            string message = Path.GetFileName(result.FullName);
-
-            string messageId = GetNewMessageId();
-            Notification notification = new Notification(
-                m_growlApplication.Name,
-                c_testRunSucceeded,
-                messageId,
-                "NUnit test run has finished successfully.",
-                message,
-                null,
-                false,
-                Priority.Normal,
-                messageId);
-            m_growlConnector.Notify(notification);
-        }
-
-        private void NotifyTestRunFailure(TestResult result)
-        {
-            string message = Path.GetFileName(result.FullName);
-
-            string messageId = GetNewMessageId();
-            Notification notification = new Notification(
-                m_growlApplication.Name,
-                c_testRunFailed,
-                messageId,
-                "NUnit test run has failed.",
-                message,
-                Resources.Error,
-                false,
-                Priority.High,
+                Priority.VeryLow,
                 messageId);
             m_growlConnector.Notify(notification);
         }
 
         private void NotifyFirstTestFailure(TestResult result)
         {
+            if (!Settings.Default.NotifyFirstTestFailed)
+            {
+                return;
+            }
+
             string message = string.Format(
                 "Test \"{0}\" has failed.\n\n" +
                     "Continuing running...",
@@ -156,6 +133,65 @@ namespace NUnitGrowlAddIn
             m_growlConnector.Notify(notification);
         }
 
+        private void NotifyTestRunSuccess(TestResult result)
+        {
+            if (!Settings.Default.NotifyTestRunFinished)
+            {
+                return;
+            }
+
+            string message = Path.GetFileName(result.FullName);
+
+            string messageId = GetNewMessageId();
+            Notification notification = new Notification(
+                m_growlApplication.Name,
+                c_testRunSucceeded,
+                messageId,
+                "NUnit test run has finished successfully.",
+                message,
+                null,
+                false,
+                Priority.Normal,
+                messageId);
+            m_growlConnector.Notify(notification);
+        }
+
+        private void NotifyTestRunFailure(TestResult result)
+        {
+            if (!Settings.Default.NotifyTestRunFinished)
+            {
+                return;
+            }
+
+            string message = Path.GetFileName(result.FullName);
+
+            string messageId = GetNewMessageId();
+            Notification notification = new Notification(
+                m_growlApplication.Name,
+                c_testRunFailed,
+                messageId,
+                "NUnit test run has failed.",
+                message,
+                Resources.Error,
+                false,
+                Priority.High,
+                messageId);
+            m_growlConnector.Notify(notification);
+        }
+
+        private void NotifyTestRunFailure(Exception exception)
+        {
+            if (!Settings.Default.NotifyTestRunFinished)
+            {
+                return;
+            }
+
+            var result = new TestResult(new TestName() { FullName = m_lastTestRunFullName });
+            result.Error(exception);
+
+            NotifyTestRunFailure(result);
+        }
+
         #endregion
 
         #region IAddin Members
@@ -163,10 +199,12 @@ namespace NUnitGrowlAddIn
         public bool Install(IExtensionHost host)
         {
             #region Argument Check
+
             if (host == null)
             {
                 throw new ArgumentNullException("host");
             }
+
             #endregion
 
             IExtensionPoint eventListenersPoint = host.GetExtensionPoint("EventListeners");
@@ -186,10 +224,12 @@ namespace NUnitGrowlAddIn
         public void RunFinished(Exception exception)
         {
             #region Argument Check
+
             if (exception == null)
             {
                 throw new ArgumentNullException("exception");
             }
+
             #endregion
 
             if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
@@ -197,19 +237,18 @@ namespace NUnitGrowlAddIn
                 return;
             }
 
-            TestResult result = new TestResult(new TestName() { FullName = m_lastTestRunFullName });
-            result.Error(exception);
-
-            this.NotifyTestRunFailure(result);
+            NotifyTestRunFailure(exception);
         }
 
         public void RunFinished(TestResult result)
         {
             #region Argument Check
+
             if (result == null)
             {
                 throw new ArgumentNullException("result");
             }
+
             #endregion
 
             if (m_growlConnector == null || !GrowlConnector.IsGrowlRunningLocally())
@@ -219,11 +258,11 @@ namespace NUnitGrowlAddIn
 
             if (result.IsSuccess)
             {
-                this.NotifyTestRunSuccess(result);
+                NotifyTestRunSuccess(result);
             }
             else
             {
-                this.NotifyTestRunFailure(result);
+                NotifyTestRunFailure(result);
             }
         }
 
@@ -237,12 +276,7 @@ namespace NUnitGrowlAddIn
                 return;
             }
 
-            if (!Settings.Default.NotifyTestRunStarted)
-            {
-                return;
-            }
-
-            this.NotifyTestRunStarted(name, testCount);
+            NotifyTestRunStarted(name, testCount);
         }
 
         public void SuiteFinished(TestResult result)
@@ -258,13 +292,15 @@ namespace NUnitGrowlAddIn
         public void TestFinished(TestResult result)
         {
             #region Argument Check
+
             if (result == null)
             {
                 throw new ArgumentNullException("result");
             }
+
             #endregion
 
-            if (m_isFirstTestFailed || !Settings.Default.NotifyFirstTestFailed || result.IsSuccess)
+            if (m_isFirstTestFailed || result.IsSuccess)
             {
                 return;
             }
@@ -276,7 +312,7 @@ namespace NUnitGrowlAddIn
                 return;
             }
 
-            this.NotifyFirstTestFailure(result);
+            NotifyFirstTestFailure(result);
         }
 
         public void TestOutput(TestOutput testOutput)
@@ -291,7 +327,7 @@ namespace NUnitGrowlAddIn
 
         public void UnhandledException(Exception exception)
         {
-            // Nothing to do
+            NotifyTestRunFailure(exception);
         }
 
         #endregion

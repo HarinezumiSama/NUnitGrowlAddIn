@@ -25,7 +25,7 @@ namespace NUnitGrowlAddIn.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool NotifyTestRunStarted {
             get {
                 return ((bool)(this["NotifyTestRunStarted"]));
@@ -38,6 +38,15 @@ namespace NUnitGrowlAddIn.Properties {
         public bool NotifyFirstTestFailed {
             get {
                 return ((bool)(this["NotifyFirstTestFailed"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotifyTestRunFinished {
+            get {
+                return ((bool)(this["NotifyTestRunFinished"]));
             }
         }
     }
