@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,6 +12,10 @@
     <AssemblyName>NUnitGrowlAddIn.DebugDeploy</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,14 +59,36 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>SET NUnitAddInDir=C:\Program Files\NUnit\2.5.9\bin\net-2.0\addins
+    <PostBuildEvent>if exist "C:\Program Files (x86)" (
+  set AppDir="C:\Program Files (x86)"
+) else (
+  set AppDir="C:\Program Files"
+)
+
+call :DoWork %25AppDir%25
+goto END
+
+:DoWork
+set NUnitDir=%25~1\NUnit\bin\net-2.0
+echo NUnit directory: %25NUnitDir%25
+if not exist "%25NUnitDir%25" (
+  echo ERROR: NUnit directory is not found.
+  exit 1
+)
+
+set NUnitAddInDir=%25NUnitDir%25\addins
 
 if exist "%25NUnitAddInDir%25\NUnitGrowlAddIn.*" del /f /q "%25NUnitAddInDir%25\NUnitGrowlAddIn.*"
 if exist "%25NUnitAddInDir%25\Growl.*" del /f /q "%25NUnitAddInDir%25\Growl.*"
 
 xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\NUnitGrowlAddIn.*" "%25NUnitAddInDir%25\"
 xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\Growl.*" "%25NUnitAddInDir%25\"
+goto :EOF
 
-SET NUnitAddInDir=</PostBuildEvent>
+:END
+SET NUnitAddInDir=
+set NUnitDir=
+SET AppDir=
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

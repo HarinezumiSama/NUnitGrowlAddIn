@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitGrowlAddIn", "NUnitGrowlAddIn\NUnitGrowlAddIn.csproj", "{9DA70809-C12A-43C5-A08C-6B724ADD1AF7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitGrowlAddIn.DebugDeploy", "NUnitGrowlAddIn.DebugDeploy\NUnitGrowlAddIn.DebugDeploy.csproj", "{BE751090-4085-4034-BE26-F9EE6AFB6432}"
