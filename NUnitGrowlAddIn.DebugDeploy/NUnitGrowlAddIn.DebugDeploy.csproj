@@ -69,7 +69,7 @@ call :DoWork %25AppDir%25
 goto END
 
 :DoWork
-set NUnitDir=%25~1\NUnit\bin\net-2.0
+set NUnitDir=%25~1\NUnit\bin
 echo NUnit directory: %25NUnitDir%25
 if not exist "%25NUnitDir%25" (
   echo ERROR: NUnit directory is not found.
@@ -81,8 +81,8 @@ set NUnitAddInDir=%25NUnitDir%25\addins
 if exist "%25NUnitAddInDir%25\NUnitGrowlAddIn.*" del /f /q "%25NUnitAddInDir%25\NUnitGrowlAddIn.*"
 if exist "%25NUnitAddInDir%25\Growl.*" del /f /q "%25NUnitAddInDir%25\Growl.*"
 
-xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\NUnitGrowlAddIn.*" "%25NUnitAddInDir%25\"
-xcopy /H /R /Y /F "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\Growl.*" "%25NUnitAddInDir%25\"
+xcopy /F /G /H /R /Y "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\NUnitGrowlAddIn.*" "%25NUnitAddInDir%25\"
+xcopy /F /G /H /R /Y "$(SolutionDir)NUnitGrowlAddIn\bin\$(ConfigurationName)\Growl.*" "%25NUnitAddInDir%25\"
 goto :EOF
 
 :END

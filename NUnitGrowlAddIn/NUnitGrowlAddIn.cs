@@ -17,7 +17,7 @@ namespace NUnitGrowlAddIn
     [NUnitAddin(
         Type = ExtensionType.Client | ExtensionType.Core | ExtensionType.Gui,
         Name = "NUnit Add-in for Growl Notification",
-        Description = "NUnit Add-in that sends notifications about testing progress to Growl.")]
+        Description = "NUnit Add-in sends notifications about NUnit progress to Growl.")]
     public sealed class NUnitGrowlAddIn : IAddin, EventListener
     {
         #region Constants
@@ -70,7 +70,7 @@ namespace NUnitGrowlAddIn
 
         #region Private Methods
 
-        // NOTE: Any values sent to Growl (including the notification title, text, callback data, etc) must *NOT*
+        // NOTE: Any values sent to Growl (including the notification title, text, callback data, etc) *MUST NOT*
         // contain any carriage return/line feed character sequences (\r\n). This sequence is used as the end-of-line
         // delimiter in the GNTP protocol. If you want to send a line break as part of your value, you should use
         // a single newline character (\n).
